@@ -8,9 +8,9 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Pete Yandell"]
   s.email       = ["pete@envato.com"]
-  s.homepage    = ""
-  s.summary     = %q{A simple wrapper around exiv2}
-  s.description = %q{A simple wrapper around the C++ exiv2 libary for reading image metadata}
+  s.homepage    = "https://github.com/envato/exiv2"
+  s.summary     = %q{A simple wrapper around Exiv2}
+  s.description = %q{A simple wrapper around the C++ Exiv2 libary for reading image metadata}
 
   s.rubyforge_project = "exiv2"
 
