@@ -1,4 +1,12 @@
-pkg/*
-*.gem
-.bundle
+Makefile
+mkmf.log
 .DS_Store
+*.gem
+*.bundle
+*.rbc
+*.a
+*.o
+*.so
+*.dSYM
+pkg
+tmp
