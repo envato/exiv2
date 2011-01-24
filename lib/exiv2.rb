@@ -1,3 +1,1 @@
-module Exiv2
-  # Your code goes here...
-end
+require 'exiv2/exiv2'
