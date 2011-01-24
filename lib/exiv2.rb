@@ -1,0 +1,3 @@
+module Exiv2
+  # Your code goes here...
+end
