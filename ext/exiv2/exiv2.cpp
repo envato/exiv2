@@ -83,16 +83,20 @@ extern "C" {
     Exiv2::Image* image;
     Data_Get_Struct(self, Exiv2::Image, image);
 
-    Exiv2::ExifData& exif_data = image->exifData();
-    return Data_Wrap_Struct(exif_data_class, 0, 0, &exif_data);  // TODO: Deal with memory management.
+    VALUE exif_data = Data_Wrap_Struct(exif_data_class, 0, 0, &image->exifData());
+    rb_iv_set(exif_data, "@image", self);  // Make sure we don't GC the image until there are no references to the EXIF data left.
+
+    return exif_data;
   }
 
   static VALUE image_iptc_data(VALUE self) {
     Exiv2::Image* image;
     Data_Get_Struct(self, Exiv2::Image, image);
 
-    Exiv2::IptcData& iptc_data = image->iptcData();
-    return Data_Wrap_Struct(iptc_data_class, 0, 0, &iptc_data);  // TODO: Deal with memory management.
+    VALUE iptc_data = Data_Wrap_Struct(iptc_data_class, 0, 0, &image->iptcData());
+    rb_iv_set(iptc_data, "@image", self);  // Make sure we don't GC the image until there are no references to the IPTC data left.
+
+    return iptc_data;
   }
 
 
