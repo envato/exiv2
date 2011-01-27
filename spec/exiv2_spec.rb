@@ -6,6 +6,7 @@ describe Exiv2 do
     image.read_metadata
     iptc_data = image.iptc_data
     iptc_data.should be_a(Exiv2::IptcData)
+    iptc_data.inspect.should == '#<Exiv2::IptcData: {"Iptc.Application2.Caption"=>"Rhubarb rhubarb rhubard", "Iptc.Application2.Keywords"=>["fish", "custard"]}>'
     iptc_data.to_a.should == [
       ["Iptc.Application2.Caption", "Rhubarb rhubarb rhubard"],
       ["Iptc.Application2.Keywords", "fish"],
