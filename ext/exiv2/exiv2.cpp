@@ -11,6 +11,22 @@ static std::string to_std_string(VALUE string) {
   return std::string(RSTRING(string)->ptr, RSTRING(string)->len);
 }
 
+// Shared method for implementing each on IptcData and ExifData.
+template <class T>
+static VALUE metadata_each(VALUE self) {
+  T* data;
+  Data_Get_Struct(self, T, data);
+
+  for(typename T::iterator i = data->begin(); i != data->end(); i++) {
+    VALUE key   = to_ruby_string(i->key());
+    VALUE value = to_ruby_string(i->value().toString());
+    rb_yield(rb_ary_new3(2, key, value));
+  }
+
+  return Qnil;
+}
+
+
 extern "C" {
   typedef VALUE (*Method)(...);
 
@@ -49,7 +65,7 @@ extern "C" {
     image_factory_class = rb_define_class_under(exiv2_module, "ImageFactory", rb_cObject);
     rb_define_singleton_method(image_factory_class, "open", (Method)image_factory_open, 1);
 
-    exif_data_class = rb_define_class_under(exiv2_module, "IptcData", rb_cObject);
+    exif_data_class = rb_define_class_under(exiv2_module, "ExifData", rb_cObject);
     rb_include_module(exif_data_class, enumerable_module);
     rb_define_method(exif_data_class, "each", (Method)exif_data_each, 0);
 
@@ -118,38 +134,16 @@ extern "C" {
 
 
   // Exiv2::ExifData methods
-  
+
   static VALUE exif_data_each(VALUE self) {
-    Exiv2::ExifData* exif_data;
-    Data_Get_Struct(self, Exiv2::ExifData, exif_data);
-
-    if (rb_block_given_p()) {
-      for(Exiv2::ExifData::iterator i = exif_data->begin(); i != exif_data->end(); i++) {
-        VALUE key   = to_ruby_string(i->key());
-        VALUE value = to_ruby_string(i->value().toString());
-        rb_yield(rb_ary_new3(2, key, value));
-      }
-    }
-
-    return Qnil;
+    return metadata_each<Exiv2::ExifData>(self);
   }
-
+  
 
   // Exiv2::IptcData methods
   
   static VALUE iptc_data_each(VALUE self) {
-    Exiv2::IptcData* iptc_data;
-    Data_Get_Struct(self, Exiv2::IptcData, iptc_data);
-
-    if (rb_block_given_p()) {
-      for(Exiv2::IptcData::iterator i = iptc_data->begin(); i != iptc_data->end(); i++) {
-        VALUE key   = to_ruby_string(i->key());
-        VALUE value = to_ruby_string(i->value().toString());
-        rb_yield(rb_ary_new3(2, key, value));
-      }
-    }
-
-    return Qnil;
+    return metadata_each<Exiv2::IptcData>(self);
   }
   
 }
