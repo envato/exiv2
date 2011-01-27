@@ -11,20 +11,6 @@ static std::string to_std_string(VALUE string) {
   return std::string(RSTRING(string)->ptr, RSTRING(string)->len);
 }
 
-// Extract data from an Exiv2::IptcData or an Exiv2::ExifData into a Ruby hash.
-template <class T>
-static VALUE data_to_hash(T& data) {
-  VALUE hash = rb_hash_new();
-
-  for(typename T::iterator i = data.begin(); i != data.end(); i++) {
-    VALUE key   = to_ruby_string(i->key());
-    VALUE value = to_ruby_string(i->value().toString());
-    rb_hash_aset(hash, key, value);
-  }
-
-  return hash;
-}
-
 extern "C" {
   typedef VALUE (*Method)(...);
 
@@ -41,8 +27,16 @@ extern "C" {
   static VALUE image_factory_class;
   static VALUE image_factory_open(VALUE klass, VALUE path);
 
+  static VALUE exif_data_class;
+  static VALUE exif_data_each(VALUE self);
+
+  static VALUE iptc_data_class;
+  static VALUE iptc_data_each(VALUE self);
+
 
   void Init_exiv2() {
+    VALUE enumerable_module = rb_const_get(rb_cObject, rb_intern("Enumerable"));
+
     exiv2_module = rb_define_module("Exiv2");
 
     basic_error_class = rb_define_class_under(exiv2_module, "BasicError", rb_eRuntimeError);
@@ -54,6 +48,14 @@ extern "C" {
 
     image_factory_class = rb_define_class_under(exiv2_module, "ImageFactory", rb_cObject);
     rb_define_singleton_method(image_factory_class, "open", (Method)image_factory_open, 1);
+
+    exif_data_class = rb_define_class_under(exiv2_module, "IptcData", rb_cObject);
+    rb_include_module(exif_data_class, enumerable_module);
+    rb_define_method(exif_data_class, "each", (Method)exif_data_each, 0);
+
+    iptc_data_class = rb_define_class_under(exiv2_module, "IptcData", rb_cObject);
+    rb_include_module(iptc_data_class, enumerable_module);
+    rb_define_method(iptc_data_class, "each", (Method)iptc_data_each, 0);
   }
 
   
@@ -81,14 +83,16 @@ extern "C" {
     Exiv2::Image* image;
     Data_Get_Struct(self, Exiv2::Image, image);
 
-    return data_to_hash<Exiv2::ExifData>(image->exifData());
+    Exiv2::ExifData& exif_data = image->exifData();
+    return Data_Wrap_Struct(exif_data_class, 0, 0, &exif_data);  // TODO: Deal with memory management.
   }
 
   static VALUE image_iptc_data(VALUE self) {
     Exiv2::Image* image;
     Data_Get_Struct(self, Exiv2::Image, image);
 
-    return data_to_hash<Exiv2::IptcData>(image->iptcData());
+    Exiv2::IptcData& iptc_data = image->iptcData();
+    return Data_Wrap_Struct(iptc_data_class, 0, 0, &iptc_data);  // TODO: Deal with memory management.
   }
 
 
@@ -108,4 +112,40 @@ extern "C" {
     return Data_Wrap_Struct(image_class, 0, image_free, image);
   }
 
+
+  // Exiv2::ExifData methods
+  
+  static VALUE exif_data_each(VALUE self) {
+    Exiv2::ExifData* exif_data;
+    Data_Get_Struct(self, Exiv2::ExifData, exif_data);
+
+    if (rb_block_given_p()) {
+      for(Exiv2::ExifData::iterator i = exif_data->begin(); i != exif_data->end(); i++) {
+        VALUE key   = to_ruby_string(i->key());
+        VALUE value = to_ruby_string(i->value().toString());
+        rb_yield(rb_ary_new3(2, key, value));
+      }
+    }
+
+    return Qnil;
+  }
+
+
+  // Exiv2::IptcData methods
+  
+  static VALUE iptc_data_each(VALUE self) {
+    Exiv2::IptcData* iptc_data;
+    Data_Get_Struct(self, Exiv2::IptcData, iptc_data);
+
+    if (rb_block_given_p()) {
+      for(Exiv2::IptcData::iterator i = iptc_data->begin(); i != iptc_data->end(); i++) {
+        VALUE key   = to_ruby_string(i->key());
+        VALUE value = to_ruby_string(i->value().toString());
+        rb_yield(rb_ary_new3(2, key, value));
+      }
+    }
+
+    return Qnil;
+  }
+  
 }

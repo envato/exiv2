@@ -4,6 +4,8 @@ A simple wrapper around the C++ Exiv2 libary for reading image metadata.
 
 See http://www.exiv2.org/
 
+Requires that the exiv2 C++ library is installed.
+
 == Usage
 
     gem install exiv2
@@ -11,8 +13,10 @@ See http://www.exiv2.org/
     require 'exiv2'
     image = Exiv2::ImageFactory.open("image.jpg")
     image.read_metadata
-    puts image.exif_data.inspect
-    puts image.iptc_data.inspect
+    image.iptc_data.each do |key, value|
+      puts "#{key} = #{value}\n"
+    end
+    image.exif_data.each { ... }
 
 == Why?
 
