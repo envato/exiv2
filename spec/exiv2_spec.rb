@@ -25,6 +25,12 @@ describe Exiv2 do
     }
   end
 
+  it "should handle a Pathname being passed to open" do
+    image = Exiv2::ImageFactory.open(Pathname.new("spec/files/test.jpg"))
+    image.read_metadata
+    image.iptc_data.to_hash.should_not be_empty
+  end
+
   it "should raise an error when trying to open a non-existant file" do
     expect {
       Exiv2::ImageFactory.open("tmp/no-such-file.jpg")
