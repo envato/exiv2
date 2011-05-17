@@ -12,7 +12,7 @@ static std::string to_std_string(VALUE string) {
   return std::string(RSTRING(string)->ptr, RSTRING(string)->len);
 }
 
-// Shared method for implementing each on IptcData and ExifData.
+// Shared method for implementing each on XmpData, IptcData and ExifData.
 template <class T>
 static VALUE metadata_each(VALUE self) {
   T* data;
@@ -39,6 +39,7 @@ extern "C" {
   static void image_free(Exiv2::Image* image);
   static VALUE image_read_metadata(VALUE self);
   static VALUE image_iptc_data(VALUE self);
+  static VALUE image_xmp_data(VALUE self);
   static VALUE image_exif_data(VALUE self);
 
   static VALUE image_factory_class;
@@ -50,6 +51,8 @@ extern "C" {
   static VALUE iptc_data_class;
   static VALUE iptc_data_each(VALUE self);
 
+  static VALUE xmp_data_class;
+  static VALUE xmp_data_each(VALUE self);
 
   void Init_exiv2() {
     VALUE enumerable_module = rb_const_get(rb_cObject, rb_intern("Enumerable"));
@@ -61,6 +64,7 @@ extern "C" {
     image_class = rb_define_class_under(exiv2_module, "Image", rb_cObject);
     rb_define_method(image_class, "read_metadata", (Method)image_read_metadata, 0);
     rb_define_method(image_class, "iptc_data", (Method)image_iptc_data, 0);
+    rb_define_method(image_class, "xmp_data", (Method)image_xmp_data, 0);
     rb_define_method(image_class, "exif_data", (Method)image_exif_data, 0);
 
     image_factory_class = rb_define_class_under(exiv2_module, "ImageFactory", rb_cObject);
@@ -73,6 +77,10 @@ extern "C" {
     iptc_data_class = rb_define_class_under(exiv2_module, "IptcData", rb_cObject);
     rb_include_module(iptc_data_class, enumerable_module);
     rb_define_method(iptc_data_class, "each", (Method)iptc_data_each, 0);
+    
+    xmp_data_class = rb_define_class_under(exiv2_module, "XmpData", rb_cObject);
+    rb_include_module(xmp_data_class, enumerable_module);
+    rb_define_method(xmp_data_class, "each", (Method)xmp_data_each, 0);
   }
 
   
@@ -117,6 +125,15 @@ extern "C" {
   }
 
 
+  static VALUE image_xmp_data(VALUE self) {
+    Exiv2::Image* image;
+    Data_Get_Struct(self, Exiv2::Image, image);
+
+    VALUE xmp_data = Data_Wrap_Struct(xmp_data_class, 0, 0, &image->xmpData());
+    rb_iv_set(xmp_data, "@image", self);  // Make sure we don't GC the image until there are no references to the XMP data left.
+
+    return xmp_data;
+  }
   // Exiv2::ImageFactory methods
 
   static VALUE image_factory_open(VALUE klass, VALUE path) {
@@ -146,5 +163,10 @@ extern "C" {
   static VALUE iptc_data_each(VALUE self) {
     return metadata_each<Exiv2::IptcData>(self);
   }
+ 
+  // Exiv2::XmpData methods
   
+  static VALUE xmp_data_each(VALUE self) {
+    return metadata_each<Exiv2::XmpData>(self);
+  } 
 }

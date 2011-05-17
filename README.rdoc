@@ -17,6 +17,10 @@ Requires that the exiv2 C++ library is installed.
       puts "#{key} = #{value}\n"
     end
     image.exif_data.each { ... }
+    image.xmp_data.each { ... }
+
+    iptc_data_hash  = image.iptc_data.to_hash
+    xmp_data_hash   = image.xmp_data.to_hash
 
 == Why?
 

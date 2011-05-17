@@ -1,6 +1,7 @@
 require 'exiv2'
 
 describe Exiv2 do
+
   it "should read IPTC data" do
     image = Exiv2::ImageFactory.open("spec/files/test.jpg")
     image.read_metadata
@@ -36,4 +37,30 @@ describe Exiv2 do
       Exiv2::ImageFactory.open("tmp/no-such-file.jpg")
     }.should raise_error(Exiv2::BasicError)
   end
+  
+  it "should read XMP data" do
+    image = Exiv2::ImageFactory.open("spec/files/test.jpg")
+    image.read_metadata
+    xmp_data = image.xmp_data
+    xmp_data.should be_a(Exiv2::XmpData)
+    xmp_data.inspect.should == '#<Exiv2::XmpData: {"Xmp.dc.description"=>"lang=\"x-default\" This is a description", "Xmp.dc.title"=>"lang=\"x-default\" Pickled"}>'
+    xmp_data.to_a.should == [
+      ["Xmp.dc.title", "lang=\"x-default\" Pickled"],
+      ["Xmp.dc.description", "lang=\"x-default\" This is a description"]
+    ]
+  end
+
+  it "should convert xmp data into a hash" do
+    image = Exiv2::ImageFactory.open("spec/files/test.jpg")
+    image.read_metadata
+    iptc_hash = image.xmp_data.to_hash
+    iptc_hash.should be_a(Hash)
+    iptc_hash.should == {
+      "Xmp.dc.title" => "lang=\"x-default\" Pickled",
+      "Xmp.dc.description" => "lang=\"x-default\" This is a description"
+    }
+  end
+
+
+
 end
