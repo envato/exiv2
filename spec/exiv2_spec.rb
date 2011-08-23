@@ -39,7 +39,7 @@ describe Exiv2 do
       iptc_hash = @iptc_data.to_hash
       iptc_hash.should be_a(Hash)
       iptc_hash.should == {
-        "Iptc.Application2.Caption" => "Rhubarb rhubarb rhubard",
+        "Iptc.Application2.Caption"  => "Rhubarb rhubarb rhubard",
         "Iptc.Application2.Keywords" => ["fish", "custard"]
       }
     end
@@ -60,11 +60,42 @@ describe Exiv2 do
     end
 
     it "should convert xmp data into a hash" do
-      iptc_hash = @xmp_data.to_hash
-      iptc_hash.should be_a(Hash)
-      iptc_hash.should == {
-        "Xmp.dc.title" => "lang=\"x-default\" Pickled",
+      xmp_hash = @xmp_data.to_hash
+      xmp_hash.should be_a(Hash)
+      xmp_hash.should == {
+        "Xmp.dc.title"       => "lang=\"x-default\" Pickled",
         "Xmp.dc.description" => "lang=\"x-default\" This is a description"
+      }
+    end
+
+  end
+
+  context "EXIF data" do
+    before do
+      @exif_data = image.exif_data
+    end
+
+    it "should read Exif data" do
+      @exif_data.should be_a(Exiv2::ExifData)
+      @exif_data.inspect.should == "#<Exiv2::ExifData: {\"Exif.Photo.PixelXDimension\"=>\"32\", \"Exif.Photo.ExifVersion\"=>\"48 50 49 48\", \"Exif.Image.Software\"=>\"plasq skitch\", \"Exif.Photo.PixelYDimension\"=>\"32\", \"Exif.Image.ExifTag\"=>\"52\"}>"
+      @exif_data.to_a.should == [
+        ["Exif.Image.Software",         "plasq skitch"],
+        ["Exif.Image.ExifTag",          "52"],
+        ["Exif.Photo.ExifVersion",      "48 50 49 48"],
+        ["Exif.Photo.PixelXDimension",  "32"],
+        ["Exif.Photo.PixelYDimension",  "32"]
+      ]
+    end
+
+    it "should convert xmp data into a hash" do
+      exif_hash = @exif_data.to_hash
+      exif_hash.should be_a(Hash)
+      exif_hash.should == {
+        "Exif.Photo.PixelXDimension" => "32",
+        "Exif.Photo.ExifVersion"     => "48 50 49 48",
+        "Exif.Image.Software"        => "plasq skitch",
+        "Exif.Photo.PixelYDimension" => "32",
+        "Exif.Image.ExifTag"         => "52"
       }
     end
 
