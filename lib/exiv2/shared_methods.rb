@@ -17,6 +17,6 @@ module SharedMethods
   end
 
   def inspect
-    "#<#{self.class.name}: #{self.to_hash.inspect}>"
+    "#<#{self.class.name}: #{Hash[self.to_hash.sort].inspect}>"
   end
 end

@@ -77,7 +77,7 @@ describe Exiv2 do
 
     it "should read Exif data" do
       @exif_data.should be_a(Exiv2::ExifData)
-      @exif_data.inspect.should == "#<Exiv2::ExifData: {\"Exif.Photo.PixelXDimension\"=>\"32\", \"Exif.Photo.ExifVersion\"=>\"48 50 49 48\", \"Exif.Image.Software\"=>\"plasq skitch\", \"Exif.Photo.PixelYDimension\"=>\"32\", \"Exif.Image.ExifTag\"=>\"52\"}>"
+      @exif_data.inspect.should == '#<Exiv2::ExifData: {"Exif.Image.ExifTag"=>"52", "Exif.Image.Software"=>"plasq skitch", "Exif.Photo.ExifVersion"=>"48 50 49 48", "Exif.Photo.PixelXDimension"=>"32", "Exif.Photo.PixelYDimension"=>"32"}>'
       @exif_data.to_a.should == [
         ["Exif.Image.Software",         "plasq skitch"],
         ["Exif.Image.ExifTag",          "52"],
