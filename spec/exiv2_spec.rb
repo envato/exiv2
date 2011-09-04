@@ -3,7 +3,7 @@ require 'exiv2'
 describe Exiv2 do
 
   it "should handle a Pathname being passed to open" do
-    image = Exiv2::ImageFactory.open(Pathname.new("spec/files/test.jpg"))
+    image = Exiv2::ImageFactory.open(Pathname.new("spec/files/test.jpg").to_s)
     image.read_metadata
     image.iptc_data.to_hash.should_not be_empty
   end
