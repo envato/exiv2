@@ -9,7 +9,7 @@ static VALUE to_ruby_string(const std::string& string) {
 // Create a C++ std::string from a Ruby string.
 static std::string to_std_string(VALUE string) {
   string = StringValue(string); // Convert the Ruby object to a string if it isn't one.
-  return std::string(RSTRING(string)->ptr, RSTRING(string)->len);
+  return std::string(RSTRING_PTR(string), RSTRING_LEN(string));
 }
 
 // Shared method for implementing each on XmpData, IptcData and ExifData.
