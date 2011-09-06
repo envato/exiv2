@@ -17,6 +17,10 @@ module SharedMethods
   end
 
   def inspect
-    "#<#{self.class.name}: #{self.to_hash.inspect}>"
+    items = []
+    self.to_hash.sort.each do |k,v|
+      items << %Q["#{k}"=>#{v.inspect}]
+    end
+    "#<#{self.class.name}: {#{items.join(', ')}}>"
   end
 end
