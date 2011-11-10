@@ -190,7 +190,12 @@ extern "C" {
     Data_Get_Struct(self, Exiv2::ExifData, data);
     
     Exiv2::ExifKey exifKey = Exiv2::ExifKey(to_std_string(key));
+    
+#if EXIV2_MAJOR_VERSION <= 0 && EXIV2_MINOR_VERSION <= 20
+    Exiv2::TypeId typeId = Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId());
+#else
     Exiv2::TypeId typeId = exifKey.defaultTypeId();
+#endif
     
     Exiv2::Value::AutoPtr v = Exiv2::Value::create(typeId);
     v->read(to_std_string(value));
