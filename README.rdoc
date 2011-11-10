@@ -1,6 +1,6 @@
 = Exiv2
 
-A simple wrapper around the C++ Exiv2 libary for reading image metadata.
+A simple wrapper around the C++ Exiv2 libary for reading and writing image metadata.
 
 See http://www.exiv2.org/
 
@@ -21,10 +21,18 @@ Requires that the exiv2 C++ library is installed.
 
     iptc_data_hash  = image.iptc_data.to_hash
     xmp_data_hash   = image.xmp_data.to_hash
+    
+    image.exif_data.delete("Exif.Image.Software")
+    image.iptc_data.delete_all("Iptc.Application2.Keywords")
+    
+    image.iptc_data["Iptc.Application2.Caption"] = "A New Caption"
+    image.iptc_data.add("Iptc.Application2.Keywords", "fishy")
+    
+    image.write_metadata
 
 == Why?
 
-None of the existing Ruby libraries for reading image metadata did quite what
+None of the existing Ruby libraries for reading and writing image metadata did quite what
 we wanted, so we figured it wouldn't be too hard to wrap enough of Exiv2 to
 meet our needs.
 
@@ -34,7 +42,8 @@ are welcome.
 
 == Compatibility
 
-Tested with Ruby 1.8.7 and Exiv2 0.21.
+Tested with Ruby 1.8.7 and Exiv2 0.21 and
+with Ruby 1.9.3 and Exiv2 0.21.
 
 == Developing
  

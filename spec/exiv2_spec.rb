@@ -1,4 +1,5 @@
 require 'exiv2'
+require 'fileutils'
 
 describe Exiv2 do
 
@@ -14,6 +15,20 @@ describe Exiv2 do
     }.should raise_error(Exiv2::BasicError)
   end
 
+  it "should write metadata" do
+    FileUtils.cp("spec/files/test.jpg", "spec/files/test_tmp.jpg")
+    image = Exiv2::ImageFactory.open("spec/files/test_tmp.jpg")
+    image.read_metadata
+    image.iptc_data["Iptc.Application2.Caption"] = "A New Caption"
+    image.write_metadata
+    image = nil
+    
+    image2 = Exiv2::ImageFactory.open("spec/files/test_tmp.jpg")
+    image2.read_metadata
+    image2.iptc_data["Iptc.Application2.Caption"].should == "A New Caption"
+    FileUtils.rm("spec/files/test_tmp.jpg")
+  end
+  
   let(:image) do
     image = Exiv2::ImageFactory.open("spec/files/test.jpg")
     image.read_metadata
@@ -43,6 +58,36 @@ describe Exiv2 do
         "Iptc.Application2.Keywords" => ["fish", "custard"]
       }
     end
+    
+    it "should write IPTC data" do
+      @iptc_data.add("Iptc.Application2.Keywords", "fishy")
+      @iptc_data.to_a.should == [
+        ["Iptc.Application2.Caption", "Rhubarb rhubarb rhubard"],
+        ["Iptc.Application2.Keywords", "fish"],
+        ["Iptc.Application2.Keywords", "custard"],
+        ["Iptc.Application2.Keywords", "fishy"]
+      ]
+    end
+    
+    it "should set IPTC data" do
+      @iptc_data["Iptc.Application2.Caption"] = "A New Caption"
+      @iptc_data.to_hash["Iptc.Application2.Caption"].should == "A New Caption"
+    end
+    
+    it "should set multiply IPTC data values" do
+      @iptc_data["Iptc.Application2.Keywords"] = ["abc", "cde"]
+      @iptc_data.to_hash["Iptc.Application2.Keywords"].should == ["abc", "cde"]
+    end
+    
+    it "should delete one value of IPTC data" do
+      @iptc_data.delete("Iptc.Application2.Keywords")
+      @iptc_data.to_hash["Iptc.Application2.Keywords"].should == "custard"
+    end
+    
+    it "should delete all values of IPTC data" do
+      @iptc_data.delete_all("Iptc.Application2.Keywords")
+      @iptc_data.to_hash["Iptc.Application2.Keywords"].should == nil
+    end
   end
 
   context "XMP data" do
@@ -68,6 +113,31 @@ describe Exiv2 do
       }
     end
 
+    it "should write XMP data" do
+      @xmp_data["Xmp.dc.title"] = "lang=\"x-default\" Changed!"
+      @xmp_data.to_hash["Xmp.dc.title"].should == "lang=\"x-default\" Changed!"
+    end
+    
+    it "should set XMP data" do
+      @xmp_data["Xmp.dc.title"] = "A New Title"
+      @xmp_data.to_hash["Xmp.dc.title"].should == "lang=\"x-default\" A New Title"
+    end
+    
+    it "should set multiply XMP data values" do
+      @xmp_data["Xmp.dc.title"] = ["abc", "cde"]
+      @xmp_data.to_hash["Xmp.dc.title"].should == ["lang=\"x-default\" abc", "lang=\"x-default\" cde"]
+    end
+    
+    it "should delete one value of XMP data" do
+      @xmp_data["Xmp.dc.title"] = ["abc", "cde"]
+      @xmp_data.delete("Xmp.dc.title")
+      @xmp_data.to_hash["Xmp.dc.title"].should == "lang=\"x-default\" cde"
+    end
+    
+    it "should delete all values of XMP data" do
+      @xmp_data.delete_all("Xmp.dc.title")
+      @xmp_data.to_hash["Xmp.dc.title"].should == nil
+    end
   end
 
   context "EXIF data" do
@@ -99,5 +169,36 @@ describe Exiv2 do
       }
     end
 
+    it "should write Exif data" do
+      @exif_data.add("Exif.Image.Software", "ruby-exiv2")
+      @exif_data.to_hash.should == {
+        "Exif.Photo.PixelXDimension" => "32",
+        "Exif.Photo.ExifVersion"     => "48 50 49 48",
+        "Exif.Image.Software"        => ["plasq skitch", "ruby-exiv2"],
+        "Exif.Photo.PixelYDimension" => "32",
+        "Exif.Image.ExifTag"         => "52"
+      }
+    end
+    
+    it "should set Exif data" do
+      @exif_data["Exif.Image.Software"] = "ruby-exiv2"
+      @exif_data.to_hash["Exif.Image.Software"].should == "ruby-exiv2"
+    end
+    
+    it "should set multiply Exif data values" do
+      @exif_data["Exif.Image.Software"] = ["ruby-exiv2", "plasq skitch"]
+      @exif_data.to_hash["Exif.Image.Software"].should == ["ruby-exiv2", "plasq skitch"]
+    end
+    
+    it "should delete one value of Exif data" do
+      @exif_data["Exif.Image.Software"] = ["ruby-exiv2", "plasq skitch"]
+      @exif_data.delete("Exif.Image.Software")
+      @exif_data.to_hash["Exif.Image.Software"].should == "plasq skitch"
+    end
+    
+    it "should delete all values of Exif data" do
+      @exif_data.delete_all("Exif.Image.Software")
+      @exif_data.to_hash["Exif.Image.Software"].should == nil
+    end
   end
 end

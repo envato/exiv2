@@ -23,4 +23,26 @@ module SharedMethods
     end
     "#<#{self.class.name}: {#{items.join(', ')}}>"
   end
+  
+  def [](key) 
+    self.to_hash[key]
+  end
+  
+  def []=(key, value)
+    delete_all(key)
+    if value.is_a?(Array)
+      value.each do |v|
+        self.add(key, v)
+      end
+    else
+      self.add(key, value)
+    end
+  end
+  
+  def delete_all(key)
+    del = true
+    while(del) do
+      del = self.delete(key)
+    end 
+  end
 end
