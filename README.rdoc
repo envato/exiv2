@@ -42,8 +42,7 @@ are welcome.
 
 == Compatibility
 
-Tested with Ruby 1.8.7 and Exiv2 0.21 and
-with Ruby 1.9.3 and Exiv2 0.21.
+Tested with Ruby 1.8.7 and 1.9.3, and Exiv2 0.20 and 0.21
 
 == Developing
  
@@ -59,6 +58,10 @@ with Ruby 1.9.3 and Exiv2 0.21.
 
 In early development. Very little of Exiv2's API is supported, and it hasn't
 been heavily tested.
+
+== Contributors
+
+Pete Yandell, Mark Turnley, Lucas Parry, Norbert Wojtwoicz, Jan Graichen, John Barton
 
 == Copyright
 
