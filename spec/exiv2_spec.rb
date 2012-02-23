@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'exiv2'
 require 'fileutils'
 
@@ -27,6 +28,14 @@ describe Exiv2 do
     image2.read_metadata
     image2.iptc_data["Iptc.Application2.Caption"].should == "A New Caption"
     FileUtils.rm("spec/files/test_tmp.jpg")
+  end
+
+  it 'reads UTF-8 data' do
+    image = Exiv2::ImageFactory.open(Pathname.new("spec/files/photo_with_utf8_description.jpg").to_s)
+    image.read_metadata
+    description = image.exif_data["Exif.Image.ImageDescription"]
+    description.encoding.should == Encoding::UTF_8
+    description.should == 'Site view of a naked pregnant woman, holding a file Polish Złoty in front of her breast while embracing her belly, standing over a white background.'
   end
   
   let(:image) do

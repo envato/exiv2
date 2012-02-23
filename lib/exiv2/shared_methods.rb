@@ -1,8 +1,11 @@
+# coding: utf-8
 module SharedMethods
   def to_hash
     result = {}
 
     self.each do |key, value|
+      key.force_encoding('utf-8')
+      value.force_encoding('utf-8')
       if result[key]
         if result[key].is_a? Array
           result[key] << value
