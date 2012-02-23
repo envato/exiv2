@@ -36,7 +36,7 @@ describe Exiv2 do
     image.read_metadata
     description = image.exif_data["Exif.Image.ImageDescription"]
     description.encoding.should == Encoding::UTF_8
-    description.should == 'Site view of a naked pregnant woman, holding a file Polish Złoty in front of her breast while embracing her belly, standing over a white background.'
+    description.should == 'UTF-8 description. ☃ł㌎'
   end
   
   let(:image) do
