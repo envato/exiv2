@@ -10,3 +10,4 @@ mkmf.log
 *.dSYM
 pkg
 tmp
+bin
