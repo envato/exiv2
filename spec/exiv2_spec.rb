@@ -35,8 +35,21 @@ describe Exiv2 do
     image = Exiv2::ImageFactory.open(Pathname.new("spec/files/photo_with_utf8_description.jpg").to_s)
     image.read_metadata
     description = image.exif_data["Exif.Image.ImageDescription"]
-    description.encoding.should == Encoding::UTF_8
+    if description.respond_to? :encoding # Only in Ruby 1.9+
+      description.encoding.should == Encoding::UTF_8
+    end
     description.should == 'UTF-8 description. ☃ł㌎'
+  end
+
+  it 'reads UTF-8 data in each' do
+    if String.new.respond_to? :encoding # Only in Ruby 1.9+
+      image = Exiv2::ImageFactory.open(Pathname.new("spec/files/photo_with_utf8_description.jpg").to_s)
+      image.read_metadata
+      image.exif_data.each do |key,value|
+        key.encoding.should   == Encoding::UTF_8
+        value.encoding.should == Encoding::UTF_8
+      end
+    end
   end
   
   let(:image) do
