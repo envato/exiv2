@@ -3,14 +3,11 @@
 
 // Create a Ruby string from a C++ std::string.
 static VALUE to_ruby_string(const std::string& string) {
-  VALUE str = rb_str_new(string.data(), string.length());
-
-  // force UTF-8 encoding in Ruby 1.9+
-  ID forceEncodingId = rb_intern("force_encoding");
-  if(rb_respond_to(str, forceEncodingId)) {
-      rb_funcall(str, forceEncodingId, 1, rb_str_new("UTF-8", 5));
-  }
-  return str;
+  #ifdef HAVE_RUBY_ENCODING_H
+    return rb_enc_str_new(string.data(), string.length(), rb_utf8_encoding());
+  #else
+    return rb_str_new(string.data(), string.length());
+  #endif
 }
 
 // Create a C++ std::string from a Ruby string.
