@@ -65,4 +65,4 @@ Pete Yandell, Mark Turnley, Lucas Parry, Norbert Wojtwoicz, Jan Graichen, John B
 
 == Copyright
 
-Copyright (c) 2010 Envato & Pete Yandell. See LICENSE for details.
+Copyright (c) 2014 Envato & Pete Yandell. See LICENSE for details.
