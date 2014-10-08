@@ -10,9 +10,26 @@ Requires that the exiv2 C++ library is installed.
 
 ## Usage
 
-```ruby
+```
 gem install exiv2
+```
 
+if you get errors with header could not be found, please
+explicitly declare the header path
+
+```
+gem install exiv2 -- --with-exiv2-include="${EXIV2_PREFIX}/include" --with-exiv2-lib="${EXIV2_PREFIX}/lib"
+```
+
+on OSX with Homebrew's exiv2, the `EXIV2_PREFIX` can be set:
+
+```
+export EXIV2_PREFIX=$(brew --prefix exiv2)
+```
+
+Once everything is successfully installed, you can give it a go:
+
+```ruby
 require 'exiv2'
 image = Exiv2::ImageFactory.open("image.jpg")
 image.read_metadata
