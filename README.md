@@ -63,7 +63,7 @@ are welcome.
 
 ## Compatibility
 
-Tested with Ruby 1.8.7 and 1.9.3, and Exiv2 0.20 and 0.21
+Tested on 1.9.3 and 2.1.3 with Exiv2 0.24
 
 ## Developing
 
