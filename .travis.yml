@@ -1,0 +1,8 @@
+language: ruby
+rvm:
+  - 1.9.3
+  - 2.1.3
+before_script:
+  - sudo apt-get install libexiv2-dev
+script:
+  - bundle exec rake spec
