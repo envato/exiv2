@@ -63,7 +63,7 @@ are welcome.
 
 ## Compatibility
 
-Tested on 1.9.3 and 2.1.3 with Exiv2 0.24
+Tested on 1.9.3, 2.0.x and 2.1.x with Exiv2 0.24
 
 ## Developing
 
