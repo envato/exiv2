@@ -1,7 +1,8 @@
 language: ruby
 rvm:
   - 1.9.3
-  - 2.1.4
+  - 2.0
+  - 2.1
 before_script:
   - sudo apt-get install libexiv2-dev
 script:
