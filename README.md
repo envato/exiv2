@@ -14,8 +14,14 @@ Requires that the exiv2 C++ library is installed.
 gem install exiv2
 ```
 
-if you get errors with header could not be found, please
-explicitly declare the header path
+if you get errors with header could not be found below:
+
+```
+exiv2.cpp:1:10: fatal error: 'exiv2/image.hpp' file not found
+#include "exiv2/image.hpp"
+```
+
+pleaseexplicitly declare the header path
 
 ```
 gem install exiv2 -- --with-exiv2-include="${EXIV2_PREFIX}/include" --with-exiv2-lib="${EXIV2_PREFIX}/lib"
@@ -25,6 +31,21 @@ on OSX with Homebrew's exiv2, the `EXIV2_PREFIX` can be set:
 
 ```
 export EXIV2_PREFIX=$(brew --prefix exiv2)
+```
+
+If you are on new version of Command Line Tool (that is newer than 6.2, and bump into following error:
+
+```
+/Library/Developer/CommandLineTools/usr/bin/../include/c++/v1/iterator:341:10: fatal error: '__debug' file not found
+#include <__debug>
+```
+
+You can follow the quick hack by touching a new file `/Library/Developer/CommandLineTools/usr/include/c++/v1/__debug` with content:
+
+```
+#ifndef _LIBCPP_ASSERT
+#define _LIBCPP_ASSERT(...) ((void)0)
+#endif
 ```
 
 Once everything is successfully installed, you can give it a go:
