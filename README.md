@@ -21,7 +21,7 @@ exiv2.cpp:1:10: fatal error: 'exiv2/image.hpp' file not found
 #include "exiv2/image.hpp"
 ```
 
-pleaseexplicitly declare the header path
+please explicitly declare the header path
 
 ```
 gem install exiv2 -- --with-exiv2-include="${EXIV2_PREFIX}/include" --with-exiv2-lib="${EXIV2_PREFIX}/lib"
