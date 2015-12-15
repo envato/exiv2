@@ -33,6 +33,12 @@ on OSX with Homebrew's exiv2, the `EXIV2_PREFIX` can be set:
 export EXIV2_PREFIX=$(brew --prefix exiv2)
 ```
 
+If you get this error while trying to install as part of a bundle install, you can set these paths using:
+```
+bundle config build.exiv2 --with-exiv2-include="${EXIV2_PREFIX}/include" --with-exiv2-lib="${EXIV2_PREFIX}/lib"
+```
+
+
 If you are on new version of Command Line Tool (that is newer than 6.2, and bump into following error:
 
 ```
