@@ -106,7 +106,7 @@ extern "C" void Init_exiv2() {
 // Exiv2::Image Methods
 
 static void image_free(Exiv2::Image* image) {
-  delete image;
+  xfree(image);
 }
 
 static VALUE image_read_metadata(VALUE self) {
