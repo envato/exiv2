@@ -224,4 +224,13 @@ describe Exiv2 do
       expect(@exif_data.to_hash["Exif.Image.Software"]).to eq(nil)
     end
   end
+
+  it "adds #original_value to multi-lang fields" do
+    image = Exiv2::ImageFactory.open(Pathname.new("spec/files/photo_with_utf8_description.jpg").to_s)
+    image.read_metadata
+    # Don't change original string
+    image.xmp_data["Xmp.dc.title"].should == "lang=\"x-default\" Pregnant woman shown in nudity."
+    # New instance method extracting all alt-values
+    image.xmp_data["Xmp.dc.title"].original_value.should == {"x-default"=>"Pregnant woman shown in nudity."}
+  end
 end
