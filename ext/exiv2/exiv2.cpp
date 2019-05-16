@@ -1,4 +1,5 @@
 #include "exiv2/image.hpp"
+#include "exiv2/error.hpp"
 #include "ruby.h"
 
 // Create a Ruby string from a C++ std::string.

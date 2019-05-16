@@ -90,7 +90,7 @@ are welcome.
 
 ## Compatibility
 
-Tested on 1.9.3, 2.0.x and 2.1.x with Exiv2 0.24
+Tested on 1.9.3, 2.0.x and 2.1.x with Exiv2 0.27.1
 
 ## Developing
 
