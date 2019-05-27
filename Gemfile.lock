@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    exiv2 (0.0.9)
+    exiv2 (0.0.10)
 
 GEM
   remote: http://rubygems.org/
