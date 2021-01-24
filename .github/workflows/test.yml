@@ -1,0 +1,21 @@
+---
+name: tests
+on: [ push, pull_request ]
+jobs:
+  test:
+    name: Test (Ruby ${{ matrix.ruby }})
+    runs-on: ubuntu-latest
+    container: ruby:${{ matrix.ruby }}
+    strategy:
+      matrix:
+        ruby: [ '2.6', '2.7', '3.0' ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install libexiv2-dev
+        run: |
+          apt-get update --quiet
+          apt-get install --quiet --yes --no-install-recommends libexiv2-dev
+      - name: Bundle
+        run: bundle install
+      - name: RSpec
+        run: bundle exec rake spec

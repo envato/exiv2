@@ -1,6 +1,6 @@
 # Exiv2
 
-[![Build Status](https://travis-ci.org/envato/exiv2.svg)](https://travis-ci.org/envato/exiv2)
+[![Build Status](https://github.com/envato/exiv2/workflows/tests/badge.svg?branch=master)](https://github.com/envato/exiv2/actions?query=branch%3Amaster+workflow%3Atests)
 
 A simple wrapper around the C++ Exiv2 libary for reading and writing image metadata.
 
