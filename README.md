@@ -1,5 +1,8 @@
 # Exiv2
 
+[![License MIT](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/envato/exiv2/blob/master/LICENSE)
+[![Gem Version](https://img.shields.io/gem/v/exiv2.svg?maxAge=2592000)](https://rubygems.org/gems/exiv2)
+[![Gem Downloads](https://img.shields.io/gem/dt/exiv2.svg?maxAge=2592000)](https://rubygems.org/gems/exiv2)
 [![Build Status](https://github.com/envato/exiv2/workflows/tests/badge.svg?branch=master)](https://github.com/envato/exiv2/actions?query=branch%3Amaster+workflow%3Atests)
 
 A simple wrapper around the C++ Exiv2 libary for reading and writing image metadata.
