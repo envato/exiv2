@@ -12,3 +12,4 @@ pkg
 tmp
 bin
 /vendor
+/Gemfile.lock
