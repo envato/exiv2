@@ -111,6 +111,12 @@ describe Exiv2 do
       @iptc_data.delete_all("Iptc.Application2.Keywords")
       expect(@iptc_data.to_hash["Iptc.Application2.Keywords"]).to eq(nil)
     end
+
+    it "should throw error because the IPTC namespace does not exist" do
+      expect { 
+        @iptc_data.add("Iptc.DoesNotExist.New", "ruby-exiv2") 
+      }.to raise_error(Exiv2::BasicError) 
+    end
   end
 
   context "XMP data" do
@@ -160,6 +166,18 @@ describe Exiv2 do
     it "should delete all values of XMP data" do
       @xmp_data.delete_all("Xmp.dc.title")
       expect(@xmp_data.to_hash["Xmp.dc.title"]).to eq(nil)
+    end
+
+    it "should throw error because the XMP namespace does not exist" do
+      expect { 
+        @xmp_data.add("Xmp.DoesNotExist.New", "ruby-exiv2") 
+      }.to raise_error(Exiv2::BasicError) 
+    end
+
+    it "should add XMP namespace to file" do
+      @xmp_data.register("http://newnamespace.com/new.namespace/", "ShouldNowExist")
+      @xmp_data.add("Xmp.ShouldNowExist.New", "ruby-exiv2")
+      expect(@xmp_data.to_hash["Xmp.ShouldNowExist.New"]).to eq("ruby-exiv2")
     end
   end
 
@@ -222,6 +240,12 @@ describe Exiv2 do
     it "should delete all values of Exif data" do
       @exif_data.delete_all("Exif.Image.Software")
       expect(@exif_data.to_hash["Exif.Image.Software"]).to eq(nil)
+    end
+
+    it "should throw error because the Exif namespace does not exist" do
+      expect { 
+        @exif_data.add("Exif.DoesNotExist.New", "ruby-exiv2") 
+      }.to raise_error(Exiv2::BasicError) 
     end
   end
 end
