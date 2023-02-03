@@ -5,7 +5,6 @@ jobs:
   test:
     name: Test (Ruby ${{ matrix.ruby }})
     runs-on: ubuntu-latest
-    container: ruby:${{ matrix.ruby }}
     strategy:
       fail-fast: false
       matrix:
@@ -14,9 +13,11 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install libexiv2-dev
         run: |
-          apt-get update --quiet
-          apt-get install --quiet --yes --no-install-recommends libexiv2-dev
-      - name: Bundle
-        run: bundle install
+          sudo apt-get update --quiet
+          sudo apt-get install --quiet --yes --no-install-recommends libexiv2-dev
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
       - name: RSpec
         run: bundle exec rake spec
