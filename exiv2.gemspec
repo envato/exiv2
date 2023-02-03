@@ -18,8 +18,6 @@ Gem::Specification.new do |s|
   s.metadata['homepage_uri'] = s.homepage
   s.metadata['source_code_uri'] = "#{s.homepage}/tree/v#{s.version}"
 
-  s.rubyforge_project = "exiv2"
-
   s.add_development_dependency "rspec"
   s.add_development_dependency "rake-compiler"
 
