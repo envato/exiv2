@@ -12,7 +12,11 @@ Gem::Specification.new do |s|
   s.summary     = %q{A simple wrapper around Exiv2}
   s.description = %q{A simple wrapper around the C++ Exiv2 libary for reading image metadata}
 
-  s.rubyforge_project = "exiv2"
+  s.metadata['bug_tracker_uri'] = "#{s.homepage}/issues"
+  s.metadata['changelog_uri'] = "#{s.homepage}/releases"
+  s.metadata['documentation_uri'] = "https://www.rubydoc.info/gems/#{s.name}/#{s.version}"
+  s.metadata['homepage_uri'] = s.homepage
+  s.metadata['source_code_uri'] = "#{s.homepage}/tree/v#{s.version}"
 
   s.add_development_dependency "rspec"
   s.add_development_dependency "rake-compiler"
