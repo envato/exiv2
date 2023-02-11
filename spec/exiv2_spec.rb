@@ -3,7 +3,7 @@ require 'bundler/setup'
 require 'exiv2'
 require 'fileutils'
 
-describe Exiv2 do
+RSpec.describe Exiv2 do
 
   it "should handle a Pathname being passed to open" do
     image = Exiv2::ImageFactory.open(Pathname.new("spec/files/test.jpg").to_s)
