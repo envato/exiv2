@@ -13,3 +13,4 @@ tmp
 bin
 /vendor
 /Gemfile.lock
+/spec/examples.txt
