@@ -75,6 +75,7 @@ extern "C" void Init_exiv2() {
   basic_error_class = rb_define_class_under(exiv2_module, "BasicError", rb_eRuntimeError);
 
   image_class = rb_define_class_under(exiv2_module, "Image", rb_cObject);
+  rb_undef_alloc_func(image_class);
   rb_define_method(image_class, "read_metadata", (Method)image_read_metadata, 0);
   rb_define_method(image_class, "write_metadata", (Method)image_write_metadata, 0);
   rb_define_method(image_class, "iptc_data", (Method)image_iptc_data, 0);
@@ -85,18 +86,21 @@ extern "C" void Init_exiv2() {
   rb_define_singleton_method(image_factory_class, "open", (Method)image_factory_open, 1);
 
   exif_data_class = rb_define_class_under(exiv2_module, "ExifData", rb_cObject);
+  rb_undef_alloc_func(exif_data_class);
   rb_include_module(exif_data_class, enumerable_module);
   rb_define_method(exif_data_class, "each", (Method)exif_data_each, 0);
   rb_define_method(exif_data_class, "add", (Method)exif_data_add, 2);
   rb_define_method(exif_data_class, "delete", (Method)exif_data_delete, 1);
 
   iptc_data_class = rb_define_class_under(exiv2_module, "IptcData", rb_cObject);
+  rb_undef_alloc_func(iptc_data_class);
   rb_include_module(iptc_data_class, enumerable_module);
   rb_define_method(iptc_data_class, "each", (Method)iptc_data_each, 0);
   rb_define_method(iptc_data_class, "add", (Method)iptc_data_add, 2);
   rb_define_method(iptc_data_class, "delete", (Method)iptc_data_delete, 1);
   
   xmp_data_class = rb_define_class_under(exiv2_module, "XmpData", rb_cObject);
+  rb_undef_alloc_func(xmp_data_class);
   rb_include_module(xmp_data_class, enumerable_module);
   rb_define_method(xmp_data_class, "each", (Method)xmp_data_each, 0);
   rb_define_method(xmp_data_class, "add", (Method)xmp_data_add, 2);
