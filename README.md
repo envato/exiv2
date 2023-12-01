@@ -17,31 +17,6 @@ Requires that the exiv2 C++ library is installed.
 gem install exiv2
 ```
 
-if you get errors with header could not be found below:
-
-```
-exiv2.cpp:1:10: fatal error: 'exiv2/image.hpp' file not found
-#include "exiv2/image.hpp"
-```
-
-please explicitly declare the header path
-
-```
-gem install exiv2 -- --with-exiv2-include="${EXIV2_PREFIX}/include" --with-exiv2-lib="${EXIV2_PREFIX}/lib"
-```
-
-on OSX with Homebrew's exiv2, the `EXIV2_PREFIX` can be set:
-
-```
-export EXIV2_PREFIX=$(brew --prefix exiv2)
-```
-
-If you get this error while trying to install as part of a bundle install, you can set these paths using:
-```
-bundle config build.exiv2 --with-exiv2-include="${EXIV2_PREFIX}/include" --with-exiv2-lib="${EXIV2_PREFIX}/lib"
-```
-
-
 If you are on new version of Command Line Tool (that is newer than 6.2, and bump into following error:
 
 ```
@@ -97,13 +72,13 @@ Tested on 2.4.x, 2.5.x and 2.6.x with Exiv2 0.27.1
 
 ## Developing
 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
+- Fork the project.
+- Make your feature addition or bug fix.
+- Add tests for it. This is important so I don't break it in a
   future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
+- Commit, do not mess with rakefile, version, or history.
   (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+- Send me a pull request. Bonus points for topic branches.
 
 ## Status
 
