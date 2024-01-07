@@ -1,6 +1,4 @@
 #include "exiv2/exiv2.hpp"
-#include "exiv2/image.hpp"
-#include "exiv2/error.hpp"
 #include "ruby.h"
 
 #if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 27
