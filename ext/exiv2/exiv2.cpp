@@ -2,6 +2,12 @@
 #include "exiv2/error.hpp"
 #include "ruby.h"
 
+typedef VALUE (*Method)(...);
+
+static VALUE original_value(VALUE self) {
+  return rb_iv_get(self, "@value_");
+}
+
 // Create a Ruby string from a C++ std::string.
 static VALUE to_ruby_string(const std::string& string) {
   VALUE str = rb_str_new(string.data(), string.length());
@@ -12,6 +18,15 @@ static VALUE to_ruby_string(const std::string& string) {
       rb_funcall(str, forceEncodingId, 1, rb_str_new("UTF-8", 5));
   }
   return str;
+}
+
+static VALUE map_to_hash(Exiv2::LangAltValue::ValueType map) {
+    VALUE hash = rb_hash_new();
+    std::map<std::string, std::string>::iterator iterator;
+    for (iterator = map.begin(); iterator != map.end(); ++iterator) {
+        rb_hash_aset(hash, to_ruby_string(iterator->first), to_ruby_string(iterator->second));
+    }
+    return hash;
 }
 
 // Create a C++ std::string from a Ruby string.
@@ -29,13 +44,16 @@ static VALUE metadata_each(VALUE self) {
   for(typename T::iterator i = data->begin(); i != data->end(); i++) {
     VALUE key   = to_ruby_string(i->key());
     VALUE value = to_ruby_string(i->value().toString());
+    if (const Exiv2::LangAltValue* lang_alt_value = dynamic_cast<const Exiv2::LangAltValue*>(&(i->value()))) {
+        rb_iv_set(value, "@value_", map_to_hash(lang_alt_value->value_));
+    }
+    rb_define_singleton_method(value, "original_value", (Method)original_value, 0);
+
     rb_yield(rb_ary_new3(2, key, value));
   }
 
   return Qnil;
 }
-
-typedef VALUE (*Method)(...);
 
 static VALUE exiv2_module;
 

@@ -24,7 +24,7 @@ RSpec.describe Exiv2 do
     image.iptc_data["Iptc.Application2.Caption"] = "A New Caption"
     image.write_metadata
     image = nil
-    
+
     image2 = Exiv2::ImageFactory.open("spec/files/test_tmp.jpg")
     image2.read_metadata
     expect(image2.iptc_data["Iptc.Application2.Caption"]).to eq("A New Caption")
@@ -51,7 +51,7 @@ RSpec.describe Exiv2 do
       end
     end
   end
-  
+
   let(:image) do
     image = Exiv2::ImageFactory.open("spec/files/test.jpg")
     image.read_metadata
@@ -81,7 +81,7 @@ RSpec.describe Exiv2 do
         "Iptc.Application2.Keywords" => ["fish", "custard"]
       })
     end
-    
+
     it "should write IPTC data" do
       @iptc_data.add("Iptc.Application2.Keywords", "fishy")
       expect(@iptc_data.to_a).to eq([
@@ -91,22 +91,22 @@ RSpec.describe Exiv2 do
         ["Iptc.Application2.Keywords", "fishy"]
       ])
     end
-    
+
     it "should set IPTC data" do
       @iptc_data["Iptc.Application2.Caption"] = "A New Caption"
       expect(@iptc_data.to_hash["Iptc.Application2.Caption"]).to eq("A New Caption")
     end
-    
+
     it "should set multiply IPTC data values" do
       @iptc_data["Iptc.Application2.Keywords"] = ["abc", "cde"]
       expect(@iptc_data.to_hash["Iptc.Application2.Keywords"]).to eq(["abc", "cde"])
     end
-    
+
     it "should delete one value of IPTC data" do
       @iptc_data.delete("Iptc.Application2.Keywords")
       expect(@iptc_data.to_hash["Iptc.Application2.Keywords"]).to eq("custard")
     end
-    
+
     it "should delete all values of IPTC data" do
       @iptc_data.delete_all("Iptc.Application2.Keywords")
       expect(@iptc_data.to_hash["Iptc.Application2.Keywords"]).to eq(nil)
@@ -140,26 +140,37 @@ RSpec.describe Exiv2 do
       @xmp_data["Xmp.dc.title"] = "lang=\"x-default\" Changed!"
       expect(@xmp_data.to_hash["Xmp.dc.title"]).to eq("lang=\"x-default\" Changed!")
     end
-    
+
     it "should set XMP data" do
       @xmp_data["Xmp.dc.title"] = "A New Title"
       expect(@xmp_data.to_hash["Xmp.dc.title"]).to eq("lang=\"x-default\" A New Title")
     end
-    
+
     it "should set multiply XMP data values" do
       @xmp_data["Xmp.dc.title"] = ["abc", "cde"]
       expect(@xmp_data.to_hash["Xmp.dc.title"]).to eq(["lang=\"x-default\" abc", "lang=\"x-default\" cde"])
     end
-    
+
     it "should delete one value of XMP data" do
       @xmp_data["Xmp.dc.title"] = ["abc", "cde"]
       @xmp_data.delete("Xmp.dc.title")
       expect(@xmp_data.to_hash["Xmp.dc.title"]).to eq("lang=\"x-default\" cde")
     end
-    
+
     it "should delete all values of XMP data" do
       @xmp_data.delete_all("Xmp.dc.title")
       expect(@xmp_data.to_hash["Xmp.dc.title"]).to eq(nil)
+    end
+
+    it "adds #original_value to multi-lang field" do
+      @xmp_data["Xmp.dc.title"] = "A New Title"
+      expect(@xmp_data.to_hash["Xmp.dc.title"].original_value).to eq "x-default" => "A New Title"
+    end
+
+    it "adds #original_value to multiple multi-lang fields" do
+      @xmp_data["Xmp.dc.title"] = ["abc", "cde"]
+      expect(@xmp_data.to_hash["Xmp.dc.title"][0].original_value).to eq "x-default" => "abc"
+      expect(@xmp_data.to_hash["Xmp.dc.title"][1].original_value).to eq "x-default" => "cde"
     end
   end
 
@@ -202,23 +213,23 @@ RSpec.describe Exiv2 do
         "Exif.Image.ExifTag"         => "52"
       })
     end
-    
+
     it "should set Exif data" do
       @exif_data["Exif.Image.Software"] = "ruby-exiv2"
       expect(@exif_data.to_hash["Exif.Image.Software"]).to eq("ruby-exiv2")
     end
-    
+
     it "should set multiply Exif data values" do
       @exif_data["Exif.Image.Software"] = ["ruby-exiv2", "plasq skitch"]
       expect(@exif_data.to_hash["Exif.Image.Software"]).to eq(["ruby-exiv2", "plasq skitch"])
     end
-    
+
     it "should delete one value of Exif data" do
       @exif_data["Exif.Image.Software"] = ["ruby-exiv2", "plasq skitch"]
       @exif_data.delete("Exif.Image.Software")
       expect(@exif_data.to_hash["Exif.Image.Software"]).to eq("plasq skitch")
     end
-    
+
     it "should delete all values of Exif data" do
       @exif_data.delete_all("Exif.Image.Software")
       expect(@exif_data.to_hash["Exif.Image.Software"]).to eq(nil)
