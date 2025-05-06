@@ -1,5 +1,6 @@
 require 'mkmf'
 
+CONFIG['CXX'] = ENV['CXX'] || 'clang++'
 $CXXFLAGS += " -std=c++11"
 RbConfig::CONFIG['PKG_CONFIG'] = 'pkg-config'
 
@@ -20,10 +21,10 @@ if have_macro("EXV_USE_SSH", "exiv2/exv_conf.h")
 end
 
 if have_macro("EXV_USE_CURL", "exiv2/exv_conf.h")
-  if dir_config("libcurl") == [nil, nil]
+  if dir_config("curl") == [nil, nil]
     pkg_config("libcurl")
   end
-  have_library("libcurl")
+  have_library("curl")
 end
 
 create_makefile("exiv2/exiv2")
