@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/envato/exiv2"
   s.summary     = %q{A simple wrapper around Exiv2}
   s.description = %q{A simple wrapper around the C++ Exiv2 libary for reading image metadata}
+  s.required_ruby_version = '>= 2.7.0'
 
   s.metadata['bug_tracker_uri'] = "#{s.homepage}/issues"
   s.metadata['changelog_uri'] = "#{s.homepage}/releases"
