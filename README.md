@@ -68,7 +68,7 @@ are welcome.
 
 ## Compatibility
 
-Tested on 2.6.x, 2.7.x, 3.0.x, 3.1.x and 3.2.x with Exiv2 0.27.1 and 0.28.0.
+Tested on 2.7.x, 3.0.x, 3.1.x and 3.2.x with Exiv2 0.27.1 and 0.28.0.
 
 ## Developing
 
