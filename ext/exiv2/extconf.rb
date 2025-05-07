@@ -3,6 +3,9 @@ require 'mkmf'
 $CXXFLAGS += " -std=c++11"
 RbConfig::CONFIG['PKG_CONFIG'] = 'pkg-config'
 
+puts "checking for C++ compiler"
+raise "Cannot use C++ compiler" unless MakeMakefile["C++"].have_devel?
+
 if dir_config("exiv2") == [nil, nil]
   pkg_config("exiv2")
 end
